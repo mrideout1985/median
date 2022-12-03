@@ -31,12 +31,16 @@ export class AuthService {
     return status;
   }
 
-  async login(loginUserDto: LoginUserDto): Promise<any> {
+  async login(loginUserDto: LoginUserDto, response: any): Promise<any> {
     // find user in db
     const user = await this.usersService.findByLogin(loginUserDto);
 
     // generate and sign token
     const token = this._createToken({ email: user.email });
+
+    response.cookie('token', token.Authorization, {
+      httpOnly: true,
+    });
 
     return {
       ...token,
@@ -44,9 +48,13 @@ export class AuthService {
     };
   }
 
-  private _createToken({ email }): any {
+  private _createToken({ email }): {
+    expiresIn: string;
+    Authorization: string;
+  } {
     const user: JwtPayload = { email };
     const Authorization = this.jwtService.sign(user);
+
     return {
       expiresIn: process.env.EXPIRESIN,
       Authorization,
@@ -59,6 +67,13 @@ export class AuthService {
       throw new HttpException('INVALID_TOKEN', HttpStatus.UNAUTHORIZED);
     }
     return user;
+  }
+
+  async logout(response: any): Promise<any> {
+    response.clearCookie('token');
+    return {
+      message: 'LOGOUT_SUCCESS',
+    };
   }
 }
 
