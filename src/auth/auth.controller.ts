@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, LoginUserDto } from '../users/dto/users.user.dto';
@@ -28,7 +29,10 @@ export class AuthController {
   }
 
   @Post('login')
-  public async login(@Body() loginUserDto: LoginUserDto): Promise<any> {
-    return await this.authService.login(loginUserDto);
+  public async login(
+    @Body() loginUserDto: LoginUserDto,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<any> {
+    return await this.authService.login(loginUserDto, response);
   }
 }
