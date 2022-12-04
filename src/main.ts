@@ -8,8 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: false });
 
   const config = new DocumentBuilder()
-    .setTitle('Median')
-    .setDescription('The Median API description')
+    .setTitle('Articles')
+    .setDescription('The articles API description')
     .setVersion('0.1')
     .build();
 

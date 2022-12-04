@@ -38,7 +38,7 @@ export class AuthService {
     // generate and sign token
     const token = this._createToken({ email: user.email });
 
-    response.cookie('user', token.Authorization, {
+    response.cookie('token', token.Authorization, {
       httpOnly: true,
     });
 
@@ -67,6 +67,13 @@ export class AuthService {
       throw new HttpException('INVALID_TOKEN', HttpStatus.UNAUTHORIZED);
     }
     return user;
+  }
+
+  async logout(response: any): Promise<any> {
+    response.clearCookie('token');
+    return {
+      message: 'LOGOUT_SUCCESS',
+    };
   }
 }
 

@@ -35,4 +35,9 @@ export class AuthController {
   ): Promise<any> {
     return await this.authService.login(loginUserDto, response);
   }
+
+  @Post('logout')
+  public async logout(@Res({ passthrough: true }) response: Response) {
+    return await this.authService.logout(response);
+  }
 }
